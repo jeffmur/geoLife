@@ -32,7 +32,7 @@ networks, location privacy, and location recommendation.
 Although this dataset is wildly distributed in over 30 cities of China and even in some cities located in the USA and Europe,
 the majority of the data was created in Beijing, China. Figure 1 plots the distribution (heat map) of this dataset in Beijing. The
 figures standing on the right side of the heat bar denote the number of points generated in a location. <p>
-![](srcs/pdfheatmap.png)
+![](src/pdfheatmap.png)
 <center>
 <b>A.</b> Data overview in Beijing &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <b>B.</b> Within the 5th Ring Road of Beijing <p> <p> <b>Fig. 1:</b> Distribution of the dataset in Beijing city
 </center>
