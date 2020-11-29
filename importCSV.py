@@ -1,15 +1,19 @@
 # Get all of the user files in split by month output
 import os
 from pathlib import Path
+from numpy.core.fromnumeric import sort
 import pandas as pd
 import numpy as np
+
 
 currentDir = os.getcwd()
 
 def getUserDir(name):
+    '''Requires split_by_month_output/'''
     dataDir = os.path.join(currentDir, f'split_by_month_output/{name}')
     parseDir = Path(dataDir).rglob('*.csv')
-    files = [x for x in parseDir]
+    all = sorted(parseDir, key=lambda i: os.path.splitext(os.path.basename(i))[0])
+    files = [x for x in all]
     return files
     
 def dataSetup(all_files):    
@@ -26,6 +30,7 @@ def dropNAN(raw):
     return df
 
 def oneMonth(file):
+    '''Requires split_by_month_output/'''
     df = pd.read_csv(file, sep = ",", names=['Latitude', 'Longitude', 'Zero', 'Altitude', 'Num of Days', 'Date', 'Time'])
     return dropNAN(df)
 
