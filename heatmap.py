@@ -32,10 +32,10 @@ def setMap(df, gX, gY, cell_size):
         'maxLon' : maxLon
     }
 
-    print(f"Records: {len(df)}")
+    #print(f"Records: {len(df)}")
     # print("Bounding Box within range: ")
-    print(f"Latidude \t Min: {minLat:.6f} \t Max: {maxLat:.6f} ")
-    print(f"Longitude \t Min: {minLon:.6f} \t Max: {maxLon:.6f} ")
+    #print(f"Latidude \t Min: {minLat:.6f} \t Max: {maxLat:.6f} ")
+    # print(f"Longitude \t Min: {minLon:.6f} \t Max: {maxLon:.6f} ")
 
     # Longitude East  - West
     # Latitude  North - South
@@ -72,8 +72,8 @@ def setMap(df, gX, gY, cell_size):
     lat_cell = (cell_size / lat_deg)
     lon_cell = (cell_size / lon_deg)
 
-    print(f"Cell_Size -- Lat:{lat_cell} \t in Miles: {cell_size}")
-    print(f"Cell_Size -- Lon:{lon_cell} \t in Miles: {cell_size}")
+    # print(f"Cell_Size -- Lat:{lat_cell} \t in Miles: {cell_size}")
+    # print(f"Cell_Size -- Lon:{lon_cell} \t in Miles: {cell_size}")
 
     cells = {
         'lat' : lat_cell,
@@ -126,9 +126,14 @@ def takeLog(freq_heat, df):
         j = 0
         for i in range(0, len(record)):
             data = record[i]
+            # Log_x(0) is 0/X == 0
             l = 0
-            if(data != 0):
-                l = math.log(data,maxVal)
+            # Log_x(X) == 1 (infinitity)
+            if(data == maxVal):
+                l = 1
+            # Else calc log
+            elif(data != 0):
+                l = math.log(data, maxVal)
 
             log_freq.loc[label,j] = l
             j+=1
@@ -146,6 +151,18 @@ def plotHeatMap(freqDF, title, cell_size):
     plt.ylim(reversed(plt.ylim()))
     ax.set_title(f"{title} w/ {cell_size} sq miles")
     plt.show()
+
+def saveHeatMap(freqDF, title, path):
+    '''Save Heat Map To PNG \n
+    FreqDF: DataFrame which plots number of records at given cell\n
+    user: Name/UID \n
+    cell_size: size of cell within grid'''
+    plt.figure(figsize=freqDF.shape)
+    sns.heatmap(freqDF, vmin=0, vmax=1, annot=True)
+    #plt.ylim(reversed(plt.ylim()))
+    #ax.set_title(f"{title} w/ {cell_size} sq miles")
+    plt.savefig(f'{path}/{title}.png')
+    # print(freqDF.shape)
 
 # Ex. split_by_month_output/000/2008_10.csv
 def parseUserDate(path):
@@ -174,7 +191,7 @@ def parseUserDate(path):
 ##################################################
 ##################################################
 
-def monthHeatMap(file, cell_size, pixelX, pixelY):
+def monthHeatMap(outputDir, file, cell_size, pixelX, pixelY):
     '''Global Function that allows easy interface to generate one month heatmap for given path \n
     File: Path to csv file \n
     cell_size: in miles \n
@@ -185,8 +202,12 @@ def monthHeatMap(file, cell_size, pixelX, pixelY):
     freqDF = create2DFreq(df, bounds, grid, cells)
     log_df = takeLog(freqDF, df)
     # Show date as title
-    date = parseUserDate(file)['date']
-    plotHeatMap(log_df, date, cell_size)
+    d = parseUserDate(file)
+    user = d['name']
+    date = d['date']
+    pathOut = f"{outputDir}/{user}"
+    
+    saveHeatMap(log_df, date, pathOut)
     
 
 def allUserMonths(dir, cell_size, pixelX, pixelY):
@@ -198,7 +219,7 @@ def allUserMonths(dir, cell_size, pixelX, pixelY):
     all_files = csv.getUserDir(dir)
     for f in all_files:
         # per month
-        monthHeatMap(f, cell_size, pixelX, pixelY)
+        monthHeatMap('user_heatmap_output',f, cell_size, pixelX, pixelY)
         
 def userHeatMap(dir, cell_size, pixelX, pixelY):
     '''Plot all user data to single heat map \n
