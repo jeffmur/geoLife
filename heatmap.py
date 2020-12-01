@@ -1,4 +1,5 @@
 from math import log10
+from PIL.Image import alpha_composite
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,8 +7,7 @@ import seaborn as sns
 #import shapely
 import matplotlib.pyplot as plt
 import math
-
-from seaborn.palettes import color_palette
+from PIL import Image
 
 # Personal lib
 import importCSV as csv
@@ -157,12 +157,10 @@ def saveHeatMap(freqDF, title, path):
     FreqDF: DataFrame which plots number of records at given cell\n
     user: Name/UID \n
     cell_size: size of cell within grid'''
+
     plt.figure(figsize=freqDF.shape)
     sns.heatmap(freqDF, vmin=0, vmax=1, annot=True)
-    #plt.ylim(reversed(plt.ylim()))
-    #ax.set_title(f"{title} w/ {cell_size} sq miles")
     plt.savefig(f'{path}/{title}.png')
-    # print(freqDF.shape)
 
 # Ex. split_by_month_output/000/2008_10.csv
 def parseUserDate(path):
@@ -230,3 +228,44 @@ def userHeatMap(dir, cell_size, pixelX, pixelY):
     userDir = parseUserDate(dir)['user']
 
     plotHeatMap(freq, userDir, cell_size)
+
+def getFreqInMonth(file, cell_size, pixelX, pixelY):
+    '''Return Log DataFrame for a single FILE \n
+    returns dataframe'''
+    df = csv.oneMonth(file)
+    bounds, cells, grid = setMap(df, pixelX, pixelY, cell_size)
+    freqDF = create2DFreq(df, bounds, grid, cells)
+    log_df = takeLog(freqDF, df)
+    
+    return log_df
+
+def prodImage(path, cell_size, pixelX, pixelY):
+    '''Returns Image (pixelX, pixelY) \n
+    Representation (in black/white) of log dataframe'''
+    df = getFreqInMonth(path, cell_size, pixelX, pixelY)
+
+    img = Image.new('RGB', (pixelX, pixelY), color = 'red')
+    pixels = img.load()
+
+    for i in range(img.size[0]):
+        for j in range(img.size[1]):
+            freq = int(255*df.loc[i,j])
+            pixels[i,j] = (freq, freq, freq)
+
+    return img
+
+def prodImageForUser(output_dir, parse_dir, cell_size, pixelX, pixelY):
+    '''Generate pixelX by pixelY for each month at given path for User \n
+    File: Path to csv files \n
+    cell_size: in miles \n
+    pixelX: Pixel Width Demension \n
+    pixelY: Pixel Length Demension'''
+    all_files = csv.getUserDir(parse_dir)
+    # dir = split_/NNN/file
+    for f in all_files:
+        print(f)
+        # per month directory
+        img = prodImage(f, cell_size, pixelX, pixelY)
+        data = parseUserDate(f)
+        # Save to OUTPUT / USER DIRECTORY / DATE
+        img.save(f"{output_dir}/{data['date']}.png")
