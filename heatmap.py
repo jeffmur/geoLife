@@ -1,9 +1,13 @@
+from math import log10
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 #import shapely
 import matplotlib.pyplot as plt
+import math
+
+from seaborn.palettes import color_palette
 
 # Personal lib
 import importCSV as csv
@@ -65,11 +69,11 @@ def setMap(df, gX, gY, cell_size):
     # print(f"Total Length {bound_l} miles")
 
     # Cell size in lon/lat
-    lat_cell = (cell_size / bound_w) / lat_deg
-    lon_cell = (cell_size / bound_l) / lon_deg
+    lat_cell = (cell_size / lat_deg)
+    lon_cell = (cell_size / lon_deg)
 
-    #print(f"Latitude Cell_Size: {lat_cell}")
-    #(f"Longitude Cell_Size: {lon_cell}")
+    print(f"Cell_Size -- Lat:{lat_cell} \t in Miles: {cell_size}")
+    print(f"Cell_Size -- Lon:{lon_cell} \t in Miles: {cell_size}")
 
     cells = {
         'lat' : lat_cell,
@@ -108,6 +112,29 @@ def create2DFreq(df, bounds, grid, cells):
         freq_heat.loc[l,w] += 1
 
     return freq_heat
+
+def takeLog(freq_heat, df):
+    shape = freq_heat.shape
+    log_freq = pd.DataFrame(0, index=range(shape[0]),columns=range(shape[1]))
+    '''For each row, normalize each data point \n
+    By their maximum values between 0 and 1'''
+    # Log(sum{Freq / Max Value of image per month})
+    maxVal = freq_heat.max().max()
+    # For each row in dataframe
+    for label, record in freq_heat.iterrows():
+        # For each data point in row
+        j = 0
+        for i in range(0, len(record)):
+            data = record[i]
+            l = 0
+            if(data != 0):
+                l = math.log(data,maxVal)
+
+            log_freq.loc[label,j] = l
+            j+=1
+
+    return log_freq
+
 
 def plotHeatMap(freqDF, title, cell_size):
     '''Show Heat Map \n
@@ -156,10 +183,10 @@ def monthHeatMap(file, cell_size, pixelX, pixelY):
     df = csv.oneMonth(file)
     bounds, cells, grid = setMap(df, pixelX, pixelY, cell_size)
     freqDF = create2DFreq(df, bounds, grid, cells)
-
+    log_df = takeLog(freqDF, df)
     # Show date as title
     date = parseUserDate(file)['date']
-    plotHeatMap(freqDF, date, cell_size)
+    plotHeatMap(log_df, date, cell_size)
     
 
 def allUserMonths(dir, cell_size, pixelX, pixelY):
