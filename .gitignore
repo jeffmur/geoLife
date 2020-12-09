@@ -1,9 +1,3 @@
-/Data/
-/china-latest-free.shp
-.vscode/
-User Guide-1.3.pdf
+concat_by_month_output/
 split_by_month_output/
-__pycache__/
-/src/
-*.py
-*.ipynb 
+

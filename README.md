@@ -20,3 +20,14 @@ Todo, include relavent graph and information.
 
 Goal: public dataset when we have some results and data visualization
 
+# Roughly city limits
+BOUNDING_BOX = {
+    'minLat' : 39.8,
+    'maxLat' : 40.8,
+    'minLon' : 115.8,
+    'maxLon' : 117.4
+}
+
+# Files to generate
+generateUserImages.py
+generateMonthImages.py
