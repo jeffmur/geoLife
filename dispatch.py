@@ -3,6 +3,7 @@ import subprocess
 import sys 
 import glob
 import time
+import numpy as np
 
 DataDirectory = '/home/jeffmur/data/geoLife/split_by_month_output/'
 
@@ -40,7 +41,7 @@ monthPerUser.sort(key=lambda x: x[0])
 for i in range(len(monthPerUser)):
     monthPerUser[i] = [i, monthPerUser[i][0], monthPerUser[i][1]]
     
-values = set(map(lambda x:x[1], monthPerUser))
+values = range(1, np.amax(monthPerUser))
 
 # Group batches
 grouped = [[y[0] for y in monthPerUser if y[2]==x] for x in values]
