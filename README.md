@@ -11,9 +11,32 @@ Paper: https://doi.org/10.1145/3380970
 4. Train LSTM Model
 
 ### 1.3 Results
-Todo, include relavent graph and information.
+After pre-processes, we have removed outliers from 'Beijing, China' using OpenStreetMaps API. 
+``` python
+def fetchGeoLocation(cityCountry):
+    """
+    Using Nominatim OpenAPI to fetch Longitude and Latitude Data
+    :return: [south Latitude 
+            north Latitude, 
+            west Longitude, 
+            east Longitude]  
 
-Goal: public dataset when we have some results and data visualization
+    :param: cityCountry : format string 'city, country code' ex. 'Lynon, France' 
+    """
+    # HTTP Request recommended : "Application Name"
+    app = Nominatim(user_agent="geoLife")
+    location = app.geocode(cityCountry).raw   
+
+    return location['boundingbox']
+```
+Once the outliers were removed, the data was then split by month to another directory. The data is then fed into the Feature Matrix seen in **frequency.py**. This generates images per month and per user with a variable of spacial granularity (in our case we chose 300 meter sq cells).
+
+As a visualization, all of the images per user were then compared with the Structural Similarity Image Measure and Mean Square Error. This comparison is implemented in **imageCompare.py** where each user (for each row) is compared to every other user present in the dataset (for each column).
+
+|  Figure 1: Image comparision   | |
+|---|---|
+|  A. Mean Square Error | B. Structural Similarity Image Measure | 
+| ![Mean Square Error](src/mse.png) | ![Structural SimilarityImage](src/ssim.png) |
 
 ## 2. Data Description
 
@@ -34,13 +57,8 @@ the majority of the data was created in Beijing, China. Figure 1 plots the distr
 figures standing on the right side of the heat bar denote the number of points generated in a location. <p>
 ![](src/pdfheatmap.png)
 <center>
-<b>A.</b> Data overview in Beijing &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <b>B.</b> Within the 5th Ring Road of Beijing <p> <p> <b>Fig. 1:</b> Distribution of the dataset in Beijing city
+<b>A.</b> Data overview in Beijing &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <b>B.</b> Within the 5th Ring Road of Beijing <p> <p> <b>Fig. 2:</b> Distribution of the dataset in Beijing city
 </center>
-
-The distributions of distance and duration of the trajectories are presented in Figure 2 and Figure 3.
-In the data collection program, a portion of users have carried a GPS logger for years, while some of the others only have a
-trajectory dataset of a few weeks. This distribution is presented in Figure 4 , and the distribution of the number of trajectories
-collected by each user is shown in Figure 5.
 
 ## 3. Paper Citations
 

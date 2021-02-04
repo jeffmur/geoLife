@@ -59,7 +59,7 @@ def fetchGeoLocation(cityCountry):
     :param: cityCountry : format string 'city, country code' ex. 'Lynon, France' 
     """
     # HTTP Request recommended : "Application Name"
-    app = Nominatim(user_agent="privamov")
+    app = Nominatim(user_agent="geoLife")
     location = app.geocode(cityCountry).raw   
     # pprint(location) # pretty print JSON returned from OpenStreetMap dataset
 
