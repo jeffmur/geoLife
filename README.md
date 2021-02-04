@@ -1,10 +1,6 @@
 ## Branch: Data
 Only the generated data is stored here.
 
-When using Erobar: https://docs.google.com/document/d/1IdBo42wDw10uZL5OcpsA4e7ebX15rm9N3sMZzGTjF54/edit 
-
-Ensure that the data repo is in /UWNETID/data 
-
 ### 1.1 Mission 
 Data pre-processing to detect anomoulous users <br>
 Paper: https://doi.org/10.1145/3380970
@@ -20,14 +16,15 @@ Todo, include relavent graph and information.
 
 Goal: public dataset when we have some results and data visualization
 
-# Roughly city limits
-BOUNDING_BOX = {
-    'minLat' : 39.8,
-    'maxLat' : 40.8,
-    'minLon' : 115.8,
-    'maxLon' : 117.4
-}
-
 # Files to generate
-generateUserImages.py
-generateMonthImages.py
+dispatch.py {gen_user_all.py} or {gen_user_month.py}
+
+Modify both files: 
+- cell_size, currently 300 meters.
+- directory, to where the data is stored on your local drive(s). 
+    
+TODO:
+- Better Node Balances with CPU Cores (use file sizes rather than num of files)
+- CPU overload (groups > num of cores available)
+
+Note: your kernel will round robin and prevent overflow, however this was tested with Ryzen 7 2700x 16 Core processor. As well as, your CPU will hit 100% usage for 5 to 10 minutes to parse through large amount of files... 
