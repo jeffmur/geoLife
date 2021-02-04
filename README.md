@@ -38,6 +38,8 @@ As a visualization, all of the images per user were then compared with the Struc
 |  A. Mean Square Error | B. Structural Similarity Image Measure | 
 | ![Mean Square Error](src/mse.png) | ![Structural SimilarityImage](src/ssim.png) |
 
+The Mean Square Error, shown in Figure 1A, was normalized between 0 and 1 (log with respect to the max value present in the dataset) then inversed for an adjacent comparison to SSIM. In Figure 1B, SSIM was also normalized to fit the image between 0 and 1. This is necessary to generate images between 0 and 255 pixels. 
+
 ## 2. Data Description
 
 This GPS trajectory dataset was collected in (Microsoft Research Asia) Geolife project by 182 users in a period of over five years
