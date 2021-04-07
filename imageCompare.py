@@ -13,30 +13,30 @@ import os
 from pathlib import Path
 import preprocess as pre
 
+
 def ssimImage(df):
-    """
-    """
+    """"""
     dim = df.shape
 
-    img = Image.new('RGB', (dim[0], dim[1]), color = 'red')
+    img = Image.new("RGB", (dim[0], dim[1]), color="red")
     pixels = img.load()
 
     for row in df.itertuples():
-        # Need row index for assignment 
+        # Need row index for assignment
         for c in range(1, len(row)):
             # Capture data point @ [row, column]
             data = row[c]
-            
-            freq = int(255*data)
 
-            pixels[row[0], c-1] = (0, freq, 0)
+            freq = int(255 * data)
+
+            pixels[row[0], c - 1] = (0, freq, 0)
 
     return img
 
+
 # 2. Construct the argument parse and parse the arguments
 def ssim(first, second):
-    """
-    """
+    """"""
     # 3. Load the two input images
     imageA = cv2.imread(first)
     imageB = cv2.imread(second)
@@ -48,15 +48,15 @@ def ssim(first, second):
     # 5. Compute the Structural Similarity Index (SSIM) between the two
     #    images, ensuring that the difference image is returned
     score = ski.structural_similarity(grayA, grayB, gaussian_weights=True)
-    #diff = (diff * 255).astype("uint8")
+    # diff = (diff * 255).astype("uint8")
 
-    #print("SSIM: {}".format(diff))
+    # print("SSIM: {}".format(diff))
     return score
 
+
 def createSSIMimage(data_directory):
-    """
-    """
-    parseDir = Path(data_directory).rglob('*.png')
+    """"""
+    parseDir = Path(data_directory).rglob("*.png")
 
     all = sorted(parseDir, key=lambda i: os.path.splitext(os.path.basename(i))[0])
     files = [x for x in all]
@@ -72,50 +72,50 @@ def createSSIMimage(data_directory):
 
         df[i] = temp
         temp = []
-        i+=1
+        i += 1
 
     # Generate Image
     return df, ssimImage(df)
+
 
 ##
 ##
 ##
 def mse(first, second):
-    """
-    """
+    """"""
     # Load the two input images
     imageA = cv2.imread(first)
     imageB = cv2.imread(second)
-	# the 'Mean Squared Error' between the two images is the
-	# sum of the squared difference between the two images;
-	# NOTE: the two images must have the same dimension
+    # the 'Mean Squared Error' between the two images is the
+    # sum of the squared difference between the two images;
+    # NOTE: the two images must have the same dimension
     # return mean_squared_error(imageA, imageB)
     return ski.mean_squared_error(imageA, imageB)
 
+
 def mseImage(df):
-    """
-    """
+    """"""
     dim = df.shape
 
-    img = Image.new('RGB', (dim[0], dim[1]), color = 'red')
+    img = Image.new("RGB", (dim[0], dim[1]), color="red")
     pixels = img.load()
 
     for row in df.itertuples():
-        # Need row index for assignment 
+        # Need row index for assignment
         for c in range(1, len(row)):
             # Capture data point @ [row, column]
             data = row[c]
-            
-            freq = int(255*data)
 
-            pixels[row[0], c-1] = (0, 255-freq, 0)
+            freq = int(255 * data)
+
+            pixels[row[0], c - 1] = (0, 255 - freq, 0)
 
     return img
 
+
 def createMSEimage(data_directory):
-    """
-    """
-    parseDir = Path(data_directory).rglob('*.png')
+    """"""
+    parseDir = Path(data_directory).rglob("*.png")
 
     all = sorted(parseDir, key=lambda i: os.path.splitext(os.path.basename(i))[0])
     files = [x for x in all]
@@ -131,27 +131,26 @@ def createMSEimage(data_directory):
 
         df[i] = temp
         temp = []
-        i+=1
+        i += 1
 
     # Generate Image
     return mseImage(takeLog(df))
 
 
 def takeLog(df):
-    """
-    """
+    """"""
     maxVal = df.max().max()
     shape = df.shape
-    log_freq = pd.DataFrame(0, index=range(shape[0]),columns=range(shape[1]))
-    if(maxVal <= 1):
+    log_freq = pd.DataFrame(0, index=range(shape[0]), columns=range(shape[1]))
+    if maxVal <= 1:
         return log_freq
 
     for row in df.itertuples():
-        # Need row index for assignment 
+        # Need row index for assignment
         for c in range(1, len(row)):
             # Capture data point @ [row, column]
             data = row[c]
-            #print(data, end="")
+            # print(data, end="")
             # Expecting 0.5 -> inf (nan)
             d = pre.log_base(maxVal, data)
 
@@ -159,12 +158,12 @@ def takeLog(df):
             # if(d < 0): l = d * -1
             # # inf or > 0
             # else: l = d
-                    #print(f"Data: {data} ... logit: {d}") 
-            
+            # print(f"Data: {data} ... logit: {d}")
+
             # row[0] = Index ; c = columns
             # Offest Columns by the included index
-            log_freq.loc[row[0], c-1] = d
-    
-    #print("Calculated Logit")
+            log_freq.loc[row[0], c - 1] = d
+
+    # print("Calculated Logit")
 
     return log_freq
