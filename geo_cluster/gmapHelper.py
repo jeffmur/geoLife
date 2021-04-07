@@ -1,7 +1,8 @@
 import gmaps
 import pandas as pd
-import preprocess as pre
+import geo_cluster.preprocess as pre
 import numpy as np
+import geo_cluster.config as c
 
 parsedPath = "/home/jeffmur/data/mdcd/user_by_month"
 boundingBox = ["46.5043006", "46.6025773", "6.5838681", "6.7208137"]
@@ -147,7 +148,7 @@ def plotClusterLayer(oneCluster):
     # Plot on Google Maps via gmaps
     # TODO: set API token as .env var
     gmaps.configure(
-        api_key="AIzaSyDwyxavuW2jOi2zifvXSzdOOyVr7UKL8Iw"
+        api_key=c.API_KEY
     )  # Your Google API key
     fig = gmaps.figure()
     fig.add_layer(oneCluster)
