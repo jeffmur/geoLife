@@ -121,7 +121,7 @@ def plotCluster(clusterID, uidMap, clustersOfUID):
     # Plot on Google Maps via gmaps
     # TODO: set API token as .env var
     gmaps.configure(
-        api_key="AIzaSyDwyxavuW2jOi2zifvXSzdOOyVr7UKL8Iw"
+        api_key=c.API_KEY
     )  # Your Google API key
     fig = gmaps.figure()
     fig.add_layer(oneCluster)
