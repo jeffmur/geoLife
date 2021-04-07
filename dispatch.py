@@ -5,7 +5,7 @@ import glob
 import time
 import numpy as np
 
-DataDirectory = '/home/jeffmur/data/geoLife/split_by_month_output/'
+DataDirectory = '/home/jeffmur/data/geoLife/user_by_month/'
 
 
 args = sys.argv
@@ -71,7 +71,7 @@ for i in range(len(pathAscendSize)):
     print(len(pathAscendSize[i]))
     print(batchFiles)
     # Create Child Process on new session 
-    cmdChild = ['gnome-terminal', '-x', 'bash', '-c', f'./{pyfile} {batchFiles}']
+    cmdChild = [f'gnome-terminal', '--' , 'bash', '-c' ,f'./{pyfile} {batchFiles}']
     subprocess.run(cmdChild)
     time.sleep(2)
     

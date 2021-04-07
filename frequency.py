@@ -107,10 +107,12 @@ def imagePerMonth(boundingBox, userDir, outDir, cell_size):
 
         img = prodImage(boundingBox, month, cell_size)
         date = hp.parse4Date(month)
-
-        print(f'Saving {date}.png')
-        # Save to OUTPUT / USER DIRECTORY / DATE
-        img.save(f"{outDir}/{date}.png")
+        
+        if(np.mean(img) != 0):
+            img.save(f"{outDir}/{date}.png")
+            print(f'Saving {date}.png')
+        else:
+            print(f"Warning! Image {date}.png has no data")
 
 ###### Image Per User #######
 
@@ -160,13 +162,18 @@ def imagePerUser(boundingBox, userDir, outDir, cell_size):
             for i in range(0, len(tmp.columns)):
                 all_dfs[i] += tmp[i]
 
-            if(val > maxVal): maxVal = val
+        if(val > maxVal): maxVal = val
         
     # print(all_dfs)
     
     log_df = hp.takeLog(maxVal, all_dfs)
     userName = hp.parse4User(userDir)
     
-    print(f'Saving {userName}.png')
     # Save to OUTPUT / USER
-    genFMprime(log_df).save(f"{outDir}/{userName}.png")
+    prime = genFMprime(log_df)
+
+    if(np.mean(prime) != 0):
+        prime.save(f"{outDir}/{userName}.png")
+        print(f'Saving {userName}.png')
+    else:
+        print(f"Warning! Image {userName}.png has no data")

@@ -47,8 +47,8 @@ def ssim(first, second):
 
     # 5. Compute the Structural Similarity Index (SSIM) between the two
     #    images, ensuring that the difference image is returned
-    (score, diff) = ski.structural_similarity(grayA, grayB, gaussian_weights=True, full=True)
-    diff = (diff * 255).astype("uint8")
+    score = ski.structural_similarity(grayA, grayB, gaussian_weights=True)
+    #diff = (diff * 255).astype("uint8")
 
     #print("SSIM: {}".format(diff))
     return score
@@ -75,7 +75,7 @@ def createSSIMimage(data_directory):
         i+=1
 
     # Generate Image
-    return ssimImage(df)
+    return df, ssimImage(df)
 
 ##
 ##

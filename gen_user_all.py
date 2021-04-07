@@ -9,12 +9,12 @@ import glob
 from pathlib import Path
 import sys
 
-dataDir = '/home/jeffmur/data/geoLife/split_by_month_output/'
+dataDir = '/home/jeffmur/data/geoLife/user_by_month/'
 
 gpsHeader = ['Latitude', 'Longitude', 'Zero', 'Altitude', 'Num of Days', 'Date', 'Time']
 
 meters_size = 300 # sq meters
-CELL_SIZE = meters_size * 0.00062137 #sq miles
+CELL_SIZE = 0.5 #meters_size * 0.00062137 #sq miles
 
 args = sys.argv
 
@@ -23,13 +23,13 @@ if(len(args) <= 1):
     print("Usage: See dispatch.py")
     exit()
 
-outDir = f'/home/jeffmur/dev/testgeo/data/gps_{CELL_SIZE}_all/'
+outDir = f'/home/jeffmur/data/geoLife/gps_{CELL_SIZE}_all/'
 p = Path(outDir)
 
 if(not (os.path.isdir(p))):
     p.mkdir()
 
-boundingBox = pre.fetchGeoLocation('Beijing, China')
+boundingBox = ['39.7350200', '40.1073889', '116.1644800', '116.6597843']  # pre.fetchGeoLocation('Beijing, China')
 
 for user in args[1:]:
     val = hp.parse4User(user)
