@@ -3,3 +3,8 @@ __pycache__
 _0*
 
 venv/
+env/
+
+geo_*
+
+*.html
