@@ -36,7 +36,7 @@ As a visualization, all of the images per user were then compared with the Struc
 |  Figure 1: Image comparision   | |
 |---|---|
 |  A. Mean Square Error | B. Structural Similarity Image Measure | 
-| ![Mean Square Error](src/mse.png) | ![Structural SimilarityImage](src/ssim.png) |
+| ![Mean Square Error](art/mse.png) | ![Structural SimilarityImage](art/ssim.png) |
 
 The Mean Square Error, shown in Figure 1A, was normalized between 0 and 1 (log with respect to the max value present in the dataset) then inversed for an adjacent comparison to SSIM. In Figure 1B, SSIM was also normalized to fit the image between 0 and 1. This is necessary to generate images between 0 and 255 pixels. 
 
@@ -57,7 +57,7 @@ networks, location privacy, and location recommendation.
 Although this dataset is wildly distributed in over 30 cities of China and even in some cities located in the USA and Europe,
 the majority of the data was created in Beijing, China. Figure 1 plots the distribution (heat map) of this dataset in Beijing. The
 figures standing on the right side of the heat bar denote the number of points generated in a location. <p>
-![](src/pdfheatmap.png)
+![](art/pdfheatmap.png)
 <center>
 <b>A.</b> Data overview in Beijing &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <b>B.</b> Within the 5th Ring Road of Beijing <p> <p> <b>Fig. 2:</b> Distribution of the dataset in Beijing city
 </center>
